@@ -112,7 +112,11 @@ flowchart TD
     W --> Z[Evidence Viewer]
     W --> AA[Scientific Explanation]
 ```
+##    Architecture Diagram
 
+<img width="1536" height="1024" alt="ChatGPT Image Jul 4, 2026, 09_50_10 PM" src="https://github.com/user-attachments/assets/1acad9b9-10d1-4541-bf71-2fd2676bfe26" />
+
+---
 
 ## 🔥 Key Innovation
 
@@ -146,6 +150,12 @@ RAG Retrieval Layer
 Gemini Scientific Reasoning
 ↓
 Visualization & Insights
+
+---
+
+## System workflow
+
+<img width="1536" height="1024" alt="ChatGPT Image Jul 4, 2026, 10_20_13 PM" src="https://github.com/user-attachments/assets/bc9ae168-2826-4099-887c-2b803ac140a5" />
 
 ---
 
@@ -355,6 +365,171 @@ All profiles indicate deep ocean conditions due to
 maximum observed pressures near 2000 dbar,
 corresponding to depths of approximately 2000 meters.
 ```
+# 🏆 Research Contributions
+
+FloatChat-RAG contributes a Retrieval-Augmented Ocean Intelligence
+framework for scientific exploration of ARGO oceanographic observations.
+
+## Key Contributions
+
+-   Developed a **Retrieval-Augmented Generation (RAG)** pipeline for
+    oceanographic datasets using semantic search.
+-   Integrated **Sentence Transformers** with **ChromaDB** to enable
+    efficient retrieval across **1,882 ARGO profiles**.
+-   Designed a **metadata-aware retrieval strategy** combining vector
+    similarity with oceanographic metadata such as region, cycle number,
+    float ID, and profile location.
+-   Built an **Explainable AI workflow**, where every generated
+    explanation is grounded in retrieved scientific evidence rather than
+    hallucinated responses.
+-   Developed an interactive **Ocean Intelligence Dashboard** featuring:
+    -   Temperature vs Depth visualization
+    -   Salinity vs Depth visualization
+    -   Retrieved Float Location Mapping
+    -   Ocean Profile Highlights
+    -   Scientific reasoning powered by Gemini 2.5 Flash
+-   Created a scalable pipeline for processing **NetCDF oceanographic
+    datasets** into structured documents suitable for semantic
+    retrieval.
+
+------------------------------------------------------------------------
+
+# 📊 Experimental Results
+
+## Dataset Statistics
+
+  Metric                                                                 Value
+  --------------------- ------------------------------------------------------
+  ARGO Float Files                                                      **25**
+  Ocean Profiles                                                     **1,882**
+  Ocean Measurements                                              **138,190+**
+  Geographic Coverage                                         **Indian Ocean**
+  Variables               Temperature, Salinity, Pressure, Latitude, Longitude
+  Embedding Model                                             all-MiniLM-L6-v2
+  Vector Database                                                     ChromaDB
+  LLM                                                         Gemini 2.5 Flash
+
+## Example Retrieval
+
+### User Query
+
+``` text
+Show the deepest ocean profile
+```
+
+### Retrieved Profile
+
+``` text
+Float ID        : 1902670
+Cycle           : 60
+Maximum Depth   : 2028.0 m
+Region          : Near Sri Lanka, Northern Indian Ocean
+```
+
+### Scientific Explanation
+
+> The retrieved profile represents the deepest observed ocean conditions
+> among the retrieved candidates, reaching approximately **2028
+> meters**. Temperature decreases significantly with depth, while
+> salinity remains relatively stable, reflecting characteristics of
+> deep-water masses within the Northern Indian Ocean.
+
+### Generated Visualizations
+
+-   Temperature vs Depth Profile
+-   Salinity vs Depth Profile
+-   Float Location Map
+-   Ocean Profile Highlights
+-   Scientific Reasoning Panel
+
+------------------------------------------------------------------------
+
+# 🚀 Performance Highlights
+
+Although FloatChat-RAG is primarily a scientific exploration platform
+rather than a predictive model, its architecture demonstrates efficient
+semantic retrieval over large-scale oceanographic datasets.
+
+  Component            Implementation
+  -------------------- --------------------------------
+  Embedding Model      all-MiniLM-L6-v2
+  Vector Search        ChromaDB
+  Retrieval Strategy   Metadata + Semantic Similarity
+  Reasoning Engine     Gemini 2.5 Flash
+  Data Processing      NetCDF → Scientific Documents
+  Visualization        Streamlit + Plotly
+
+------------------------------------------------------------------------
+
+# 🌟 Novelty Highlights
+
+Unlike conventional chatbot-based assistants, FloatChat-RAG introduces
+an **evidence-grounded scientific retrieval workflow** specifically
+designed for oceanographic data.
+
+## Novel Aspects
+
+-   Retrieval-Augmented Generation applied to ARGO ocean observations.
+-   Semantic search across scientific profiles instead of keyword-based
+    retrieval.
+-   Metadata-aware retrieval incorporating oceanographic attributes.
+-   Explainable scientific reasoning backed by retrieved evidence.
+-   Integrated scientific visualization within the conversational
+    workflow.
+-   Interactive ocean intelligence dashboard combining retrieval,
+    analytics, and AI reasoning.
+
+------------------------------------------------------------------------
+
+# 🔬 Research Significance
+
+FloatChat-RAG demonstrates how Retrieval-Augmented Generation can
+support scientific discovery by bridging structured oceanographic
+datasets with large language models.
+
+## Potential Applications
+
+-   Marine Research
+-   Climate Change Analysis
+-   Ocean Monitoring
+-   Educational Platforms
+-   Environmental Intelligence
+-   Decision Support Systems
+
+------------------------------------------------------------------------
+
+# 🏅 Repository Badges
+
+Place these immediately below your project title.
+
+``` markdown
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit)
+
+![Gemini](https://img.shields.io/badge/LLM-Gemini%202.5%20Flash-blue)
+
+![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-success)
+
+![Sentence Transformers](https://img.shields.io/badge/Embeddings-all--MiniLM--L6--v2-orange)
+
+![RAG](https://img.shields.io/badge/RAG-Retrieval%20Augmented%20Generation-purple)
+
+![License](https://img.shields.io/badge/License-MIT-green)
+
+![Status](https://img.shields.io/badge/Status-Hackathon%20Project-brightgreen)
+```
+
+### Rendered Badges
+
+-   🐍 Python 3.11
+-   🔴 Streamlit Dashboard
+-   🔵 Gemini 2.5 Flash
+-   🟢 ChromaDB
+-   🟠 Sentence Transformers
+-   🟣 Retrieval-Augmented Generation
+-   🟢 MIT License
+-   🟢 Hackathon Project
 
 ---
 
