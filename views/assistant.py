@@ -1,6 +1,9 @@
 
 
-
+import matplotlib.pyplot as plt
+import profile
+from unittest import result
+import plotly.express as px
 import streamlit as st
 import pandas as pd
 
@@ -22,6 +25,12 @@ def render_assistant_page(
 ):
     st.title("🤖 FloatChat Assistant")
     st.caption("Query ocean data using natural language.")
+    # ==========================================
+    # QUERY HISTORY
+    # ==========================================
+
+    if "history" not in st.session_state:
+        st.session_state.history = []
 
     st.markdown(
         """
@@ -141,8 +150,30 @@ def render_assistant_page(
                     # =========================================
                     st.subheader("Step 1: Retrieved Profiles")
 
-                    for source in result["sources"]:
+                    for source, metadata in zip(
+                        result["sources"],
+                        result["metadata"]
+                    ):
+
                         st.success(source)
+
+                        st.caption(
+                            f"""
+                    **Region:** {metadata['region']}
+
+                    **Profile Type:** {metadata['profile_type']}
+
+                    **Water Type:** {metadata['water_type']}
+
+                    **Thermocline:** {metadata['thermocline']}
+
+                    **Salinity:** {metadata['salinity_event']}
+                    """
+                        )
+
+                        # Show anomaly only if one exists
+                        if metadata["anomaly"] != "No Significant Anomaly":
+                            st.warning(metadata["anomaly"])
 
                     # =========================================
                     # RETRIEVAL SCORES
@@ -162,18 +193,17 @@ def render_assistant_page(
                     # =========================================
                     # RETRIEVED CONTEXT
                     # =========================================
+                
                     with st.expander(
-                     "Step 3: Retrieved Evidence"
+                        "Step 3: Retrieved Evidence"
+                    ):
+
+                        for source, doc in zip(
+                            result["sources"],
+                            result["documents"]
                         ):
 
-                        for i, doc in enumerate(
-                            result["documents"],
-                            start=1
-                        ):
-
-                            st.markdown(
-                                f"### Context {i}"
-                            )
+                            st.markdown(f"### 📄 {source}")
 
                             st.write(doc)
 
@@ -182,39 +212,271 @@ def render_assistant_page(
                     # =========================================
                     # SCIENTIFIC EXPLANATION
                     # =========================================
-                    st.subheader(
-                     "Step 4: Scientific Reasoning"
-                        )
+                    
+                    # =========================================
+                    # TEMPERATURE PROFILE DATA (TEST)
+                    # =========================================
+                    st.subheader("🌡️ Temperature vs Depth (Data Check)")
 
-                    st.write(
-                        result["answer"]
+                    profile = measurements[
+                        (measurements["float_id"] == result["top_float"])
+                            &
+                        (measurements["cycle_number"] == result["top_cycle"])
+                        ]
+
+                    fig, ax = plt.subplots(figsize=(5.5, 4.5))
+
+                    ax.plot(
+                    profile["temperature"],
+                    profile["pressure"],
+                    marker="o",
+                    markersize=2,
+                    linewidth=1.5
                     )
 
+                    ax.set_xlabel("Temperature (°C)")
+                    ax.set_ylabel("Pressure (dbar)")
+                    ax.set_title(
+                    f"Temperature Profile\nFloat {result['top_float']} | Cycle {result['top_cycle']}",
+                    fontsize=13,
+                    fontweight="bold"
+                    )
+
+                    ax.invert_yaxis()
+                    ax.set_xlim(
+                    profile["temperature"].min() - 1,
+                    profile["temperature"].max() + 1
+                    )
+                    ax.grid(True, linestyle="--", alpha=0.5)
+                    plt.tight_layout()
+                    st.pyplot(fig)
+                    plt.close(fig)
+                    # =========================================
+                    # SALINITY PROFILE
+                    # =========================================
+                    st.subheader("🧂 Salinity vs Depth")
+
+                    fig, ax = plt.subplots(figsize=(5.5, 4.5))
+
+                    ax.plot(
+                    profile["salinity"],
+                    profile["pressure"],
+                    marker="o",
+                    markersize=2,
+                    linewidth=1.5
+                    )
+
+                    ax.set_xlabel("Salinity (PSU)")
+                    ax.set_ylabel("Pressure (dbar)")
+
+                    ax.set_title(
+                    f"Salinity Profile\nFloat {result['top_float']} | Cycle {result['top_cycle']}",
+                    fontsize=13,
+                    fontweight="bold"
+                    )
+
+                    ax.invert_yaxis()
+
+                    ax.set_xlim(
+                    profile["salinity"].min() - 0.2,
+                    profile["salinity"].max() + 0.2
+                    )
+
+                    ax.grid(True, linestyle="--", alpha=0.5)
+
+                    plt.tight_layout()
+
+                    st.pyplot(fig)
+
+                    plt.close(fig)
+                    st.subheader("🗺️ Retrieved Float Locations")
+
+                    retrieved_profiles = profiles[
+                    profiles.apply(
+                        lambda row: f"{row['float_id']}_{row['cycle_number']}"
+                        in result["sources"],
+                        axis=1
+                    )
+                    ].copy()
+                    retrieved_profiles["Profile"] = (
+                        retrieved_profiles["float_id"].astype(str)
+                        + "_"
+                        + retrieved_profiles["cycle_number"].astype(str)
+                        )
+
+                    retrieved_profiles["Region"] = [
+                    m["region"] for m in result["metadata"]
+                    ]
+
+                    retrieved_profiles["Water Type"] = [
+                    m["water_type"] for m in result["metadata"]
+                    ]
+
+                    fig = px.scatter_map(
+                        retrieved_profiles,
+                        lat="latitude",
+                        lon="longitude",
+                        hover_name="Profile",
+                        hover_data={
+                            "cycle_number": True,
+                            "Region": True,
+                            "Water Type": True,
+                            "latitude": ":.2f",
+                            "longitude": ":.2f"
+                            },
+                        color="Region",
+                        zoom=4,
+                        height=500
+                        )
+
+                    fig.update_layout(
+                        margin=dict(l=0, r=0, t=40, b=0)
+                        )
+
+                    st.plotly_chart(
+                        fig,
+                        use_container_width=True
+                    )
+                    # =========================================
+                    # OCEAN PROFILE HIGHLIGHTS
+                    # =========================================
+
+                    st.subheader("📊 Ocean Profile Highlights")
+
+                    # Initialize variables
+                    deepest_profile = None
+                    warmest_profile = None
+                    highest_salinity_profile = None
+
+                    deepest_depth = -1
+                    warmest_temp = -999
+                    highest_salinity = -999
+
+                    st.write("Retrieved Profiles:")
+                    st.write(
+                    retrieved_profiles[
+                    ["float_id", "cycle_number"]
+                    ]
+                    )
+
+                    # Find the deepest, warmest and highest salinity profiles
+                    for _, row in retrieved_profiles.iterrows():
+
+                        profile = measurements[
+                        (measurements["float_id"] == row["float_id"])
+                        &
+                        (measurements["cycle_number"] == row["cycle_number"])
+                        ]
+
+                        if profile.empty:
+                            continue
+
+                        max_depth = profile["pressure"].max()
+                        surface_temp = profile.iloc[0]["temperature"]
+                        max_salinity = profile["salinity"].max()
+                        st.write(
+                            f"{row['float_id']}_{row['cycle_number']}",
+                            max_depth,
+                            surface_temp,
+                            max_salinity
+                        )
+
+                        if max_depth > deepest_depth:
+                            deepest_depth = max_depth
+                            deepest_profile = row
+
+                        if surface_temp > warmest_temp:
+                            warmest_temp = surface_temp
+                            warmest_profile = row
+
+                        if max_salinity > highest_salinity:
+                            highest_salinity = max_salinity
+                            highest_salinity_profile = row
+
+                    # Display highlight cards
+                    col1, col2, col3 = st.columns(3)
+
+                    with col1:
+                        st.metric(
+                        "🏆 Deepest Profile",
+                        f"{deepest_profile['float_id']}_{deepest_profile['cycle_number']}",
+                        f"{deepest_depth:.1f} m"
+                        )
+
+                    with col2:
+                        st.metric(
+                        "🔥 Warmest Profile",
+                        f"{warmest_profile['float_id']}_{warmest_profile['cycle_number']}",
+                        f"{warmest_temp:.2f} °C"
+                        )
+
+                    with col3:
+                        st.metric(
+                        "🧂 Highest Salinity",
+                        f"{highest_salinity_profile['float_id']}_{highest_salinity_profile['cycle_number']}",
+                        f"{highest_salinity:.2f} PSU"
+                        )
+                    with st.expander("🔍 Highlight Card Debug"):
+
+                        debug_rows = []
+
+                    for _, row in retrieved_profiles.iterrows():
+
+                        profile = measurements[
+                            (measurements["float_id"] == row["float_id"])
+                            &
+                            (measurements["cycle_number"] == row["cycle_number"])
+                        ]
+
+                        if profile.empty:
+                            continue
+
+                        debug_rows.append({
+                            "Profile": f"{row['float_id']}_{row['cycle_number']}",
+                            "Max Depth (m)": round(profile["pressure"].max(), 1),
+                            "Surface Temp (°C)": round(profile.iloc[0]["temperature"], 2),
+                            "Max Salinity (PSU)": round(profile["salinity"].max(), 2),
+                        })
+
+                    st.dataframe(debug_rows, use_container_width=True)
+                    st.divider()
+                    # =========================================
+                    # SCIENTIFIC REASONING
+                    # =========================================
+
+                    st.subheader(
+                    "Step 4: Scientific Reasoning"
+                    )
+
+                    st.write(
+                    result["answer"]
+                    )
                 except Exception as e:
 
                     st.error(
                         f"RAG Assistant Error: {e}"
                     )
 
-    st.markdown("---")
+                    st.markdown("---")
 
-    st.info(
-        """
-        FloatChat RAG Pipeline
-
-        Question
-            ↓
-        ChromaDB Retrieval
-            ↓
-        Retrieved Ocean Profiles
-            ↓
-        Retrieval Scores
-            ↓
-        Retrieved Context
-            ↓
+                st.info(
+                    """
+        
+        User Question
+                ↓
+        Region Detection
+                ↓
+        Metadata Filtering
+                ↓
+        Vector Similarity Search
+                ↓
+        Retrieved Profiles
+                ↓
+        Retrieved Evidence
+                ↓
         Gemini Scientific Reasoning
-            ↓
-        Explainable Ocean Intelligence
+                ↓
+        Ocean Intelligence
+        
         """
-    )
-
+                )
