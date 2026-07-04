@@ -544,7 +544,171 @@ Place these immediately below your project title.
 * BGC float integration
 
 ---
+# 🚀 Installation & Setup
 
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/kanmaniannie180-hub/floatchat_rag.git
+cd floatchat_rag
+```
+
+---
+
+## 2. Create a Virtual Environment (Recommended)
+
+### Windows
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 4. Configure the Gemini API Key
+
+Create a file named:
+
+```text
+.env
+```
+
+Add your Gemini API key:
+
+```env
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+```
+
+You can obtain a free API key from:
+
+https://aistudio.google.com/app/apikey
+
+---
+
+## 5. Prepare the Vector Database (Optional)
+
+If the ChromaDB vector database is not included, generate it by running:
+
+```bash
+python rag/build_documents.py
+
+python rag/create_vector_db.py
+```
+
+This will:
+
+- Parse ARGO NetCDF files
+- Generate scientific documents
+- Create embeddings
+- Build the ChromaDB vector database
+
+---
+
+## 6. Launch FloatChat
+
+```bash
+streamlit run app.py
+```
+
+or
+
+```bash
+python -m streamlit run app.py
+```
+
+---
+
+## 7. Open the Application
+
+After launching, Streamlit will display something similar to:
+
+```
+Local URL:
+http://localhost:8501
+```
+
+Open the URL in your browser.
+
+---
+
+# 💬 Example Questions
+
+Try asking questions such as:
+
+```
+Show the deepest ocean profile.
+
+Find profiles near Sri Lanka.
+
+Compare temperature and salinity profiles.
+
+Show high salinity events.
+
+Which profile has the warmest surface temperature?
+
+Explain the retrieved ocean observations.
+
+Show thermocline characteristics.
+
+Find deep ocean profiles in the Indian Ocean.
+
+Compare retrieved profiles.
+
+Visualize the retrieved float locations.
+```
+
+---
+
+# 📁 Required Project Structure
+
+```
+FloatChat-RAG/
+│
+├── app.py
+├── requirements.txt
+├── .env
+│
+├── data/
+│
+├── rag/
+│   ├── build_documents.py
+│   ├── create_vector_db.py
+│   ├── gemini_rag.py
+│   ├── chroma_db/
+│   └── documents.pkl
+│
+├── views/
+├── core/
+├── assets/
+└── components/
+```
+
+---
+
+# ⚠️ Notes
+
+- Python **3.10+** is recommended.
+- A valid **Gemini API Key** is required.
+- Ensure all required dependencies are installed before launching the application.
+- If the vector database is not present, generate it before querying the assistant.
+
+  ---
 ## 🏁 Conclusion
 
 FloatChat-RAG transforms large-scale oceanographic measurements into explainable scientific intelligence through semantic retrieval, vector search, and AI-powered reasoning.
