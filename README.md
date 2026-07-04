@@ -1,306 +1,379 @@
-# FloatChat 🌊  
-## AI-Powered Ocean Data Intelligence System
+# FloatChat-RAG 🌊
 
-FloatChat is an interactive ocean intelligence platform that transforms complex ARGO oceanographic data into explainable insights using a multi-layer AI pipeline.
+## Retrieval-Augmented Ocean Intelligence Assistant
 
-Developed for the **Neural Nexus AI/ML Hackathon 2026**.
+FloatChat-RAG is an AI-powered ocean intelligence platform that transforms ARGO oceanographic measurements into explainable scientific insights using Retrieval-Augmented Generation (RAG), semantic search, and large language models.
+
+Developed for the Neural Nexus AI/ML Hackathon 2026.
 
 ---
 
 ## 🚀 Problem Statement
 
-ARGO ocean data is:
+Oceanographic datasets contain thousands of profiles and hundreds of thousands of measurements.
 
-- High-dimensional and large-scale  
-- Stored in NetCDF scientific format  
-- Difficult to interpret without domain expertise  
+Challenges include:
 
-This creates a major barrier for:
-- Students  
-- Researchers  
-- Analysts  
+* Scientific NetCDF data formats
+* Large-scale multidimensional measurements
+* Difficult manual exploration
+* Limited accessibility for non-domain experts
 
-👉 Result: Ocean data remains **underutilized and inaccessible**
+As a result, valuable oceanographic information remains difficult to discover and interpret.
 
 ---
 
 ## 💡 Solution
 
-FloatChat converts raw ARGO data into an **interactive, explainable AI-driven system** that enables:
+FloatChat-RAG combines:
 
-- Natural language-based exploration  
-- Scientific insight generation  
-- Temporal and spatial analysis  
-- Pattern detection in ocean profiles  
+* Ocean data analytics
+* Scientific intelligence
+* Vector databases
+* Semantic search
+* Large Language Models
 
-👉 **“From raw ocean data to explainable intelligence”**
+to enable natural language interaction with ARGO ocean data.
 
----
+Users can ask:
 
-## 🧠 System Architecture
+* Which profiles indicate deep ocean conditions?
+* Find profiles with high salinity levels.
+* Which profiles show the warmest temperatures?
+* Compare deep and surface ocean conditions.
 
-FloatChat follows a **3-phase intelligent pipeline**:
-
-Data Ingestion → Query Intelligence → Scientific Intelligence → Analytics Layer → Visualization + Insights
-
-
----
-
-## ⚙️ Phase 1 — Query / AI Layer
-
-Enables intuitive interaction with ocean data.
-
-### Features:
-- Natural language query assistant  
-- Intent detection  
-- Entity extraction:
-  - Float ID  
-  - Cycle number  
-  - Parameter (temperature / salinity)  
-- Explanation box (interpreted query)  
-- Confidence + reasoning display  
-- Guided prompts  
-- Shortcuts:
-  - Latest profile  
-  - Earliest profile  
-  - First vs latest comparison  
-
-👉 Converts user queries → structured execution
+and receive evidence-backed scientific explanations.
 
 ---
 
-## 🌊 Phase 2 — Scientific Intelligence
+## 🧠 RAG Architecture
 
-Adds domain-aware reasoning on top of raw data.
+User Question
+↓
+Sentence Transformer Embeddings
+↓
+ChromaDB Vector Search
+↓
+Top-K Ocean Profiles
+↓
+Retrieved Evidence
+↓
+Gemini 2.5 Flash
+↓
+Scientific Explanation
 
-### Features:
-- Thermocline detection  
-- Temperature gradient analysis  
-- Surface vs deep summaries  
-- Region classification  
-- Anomaly detection  
-- Profile quality indicators  
-- Depth-band summaries  
+---
+```mermaid
+flowchart TD
 
-👉 Transforms raw measurements → scientific insights
+    A[🌊 ARGO NetCDF Files] --> B[Data Processing Pipeline]
+
+    B --> C[Profiles Dataset]
+    B --> D[Measurements Dataset]
+
+    C --> E[Scientific Intelligence Layer]
+    D --> E
+
+    E --> F[Thermocline Detection]
+    E --> G[Gradient Analysis]
+    E --> H[Anomaly Detection]
+    E --> I[Region Classification]
+
+    C --> J[Document Generation]
+
+    J --> K[Scientific Ocean Documents]
+
+    K --> L[Sentence Transformers<br/>all-MiniLM-L6-v2]
+
+    L --> M[Embeddings]
+
+    M --> N[(ChromaDB Vector Database)]
+
+    O[User Question] --> P[FloatChat Assistant]
+
+    P --> Q[Semantic Retrieval]
+
+    N --> Q
+
+    Q --> R[Top-K Relevant Profiles]
+
+    R --> S[Retrieved Evidence]
+
+    S --> T[Gemini 2.5 Flash]
+
+    T --> U[Scientific Reasoning]
+
+    U --> V[Explainable Ocean Intelligence]
+
+    V --> W[Streamlit Dashboard]
+
+    W --> X[Retrieved Profiles]
+    W --> Y[Similarity Scores]
+    W --> Z[Evidence Viewer]
+    W --> AA[Scientific Explanation]
+```
+
+
+## 🔥 Key Innovation
+
+FloatChat-RAG does not generate answers directly.
+
+Instead it:
+
+1. Retrieves relevant ocean profiles
+2. Shows retrieval evidence
+3. Displays similarity scores
+4. Generates scientific reasoning grounded in retrieved data
+
+This creates an Explainable AI workflow.
 
 ---
 
-## 📊 Phase 3 — Analytics Layer
+## ⚙️ System Architecture
 
-Provides deeper exploration and comparison.
+FloatChat follows a multi-layer architecture:
 
-### Features:
-- Heatmaps across cycles  
-- Time-series analysis  
-- First vs latest comparison  
-- Two-float comparison  
-- Multi-dimensional pattern visualization  
-
-👉 Enables temporal + comparative understanding
-
----
-
-## 📂 Dataset Collection
-
-### Source:
-- ARGO Global Data Repository  
-- Indian Ocean ARGO float profiles  
-
-### Format:
-- NetCDF (`*_prof.nc`) files  
+Data Ingestion
+↓
+Query Intelligence
+↓
+Scientific Intelligence
+↓
+Analytics Layer
+↓
+RAG Retrieval Layer
+↓
+Gemini Scientific Reasoning
+↓
+Visualization & Insights
 
 ---
 
-## 📥 Data Collection Process
+## 🌊 Core Features
 
-1. Download ARGO float profile files (`*_prof.nc`)
-2. Store files in:
+### Ocean Analytics
 
+* ARGO trajectory visualization
+* Temperature profile exploration
+* Salinity profile exploration
+* Cycle comparisons
+* Regional analysis
+* Heatmaps and trends
 
-data/raw/
+### Scientific Intelligence
 
+* Thermocline detection
+* Temperature gradient analysis
+* Surface vs deep summaries
+* Profile quality indicators
+* Depth-band summaries
+* Ocean anomaly identification
 
----
+### Query Intelligence
 
-## ⚙️ Data Processing Pipeline
+* Natural language querying
+* Intent detection
+* Entity extraction
+* Query explanation
+* Guided prompts
 
-### Step 1: Parsing NetCDF files
+### RAG Assistant
 
-Using `xarray`, extract:
-- Pressure (PRES)  
-- Temperature (TEMP)  
-- Salinity (PSAL)  
-- Latitude / Longitude  
-- Cycle number  
-- Profile date  
-
----
-
-### Step 2: Create structured datasets
-
-#### Profiles Table
-- float_id  
-- cycle_number  
-- latitude  
-- longitude  
-- profile_date  
-- number of levels  
-
-#### Measurements Table
-- float_id  
-- cycle_number  
-- pressure  
-- temperature  
-- salinity  
-
----
-
-### Step 3: Data Cleaning
-
-Applied filters:
-
-- Pressure: 0 to 2500 dbar  
-- Temperature: -2°C to 40°C  
-- Salinity: 0 to 50 PSU  
-- Removed weak profiles (low depth levels)  
-
----
-
-### Step 4: Storage
-
-Processed data is stored in structured formats for efficient retrieval and visualization.
-
-data/processed/
-├── profiles_all.csv
-├── measurements_all.csv
-├── profiles_all.parquet
-└── measurements_all.parquet
-- **profiles_all.csv / parquet** → Contains profile-level metadata  
-- **measurements_all.csv / parquet** → Contains depth-wise measurements  
-
-👉 Parquet format is used for faster loading in the Streamlit application.
-
+* ChromaDB vector database
+* Sentence Transformer embeddings
+* Semantic profile retrieval
+* Similarity scoring
+* Retrieved evidence display
+* Gemini-powered scientific reasoning
+* Explainable AI workflow
 
 ---
 
 ## 📊 Dataset Summary
 
-- 25 ARGO float files  
-- ~1,891 profiles  
-- ~137,000 measurements  
+Source:
+
+* ARGO Global Data Repository
+
+Coverage:
+
+* Indian Ocean ARGO Floats
+
+Dataset Statistics:
+
+* 25 ARGO float files
+* 1,882 ocean profiles
+* 138,190 measurements
+* Temperature observations
+* Salinity observations
+* Pressure-depth measurements
+
+---
+
+## ⚙️ Data Processing Pipeline
+
+### Step 1: NetCDF Parsing
+
+Extract:
+
+* Pressure (PRES)
+* Temperature (TEMP)
+* Salinity (PSAL)
+* Latitude
+* Longitude
+* Profile date
+* Cycle number
+
+### Step 2: Data Cleaning
+
+Validation rules:
+
+* Pressure: 0–2500 dbar
+* Temperature: -2°C to 40°C
+* Salinity: 0–50 PSU
+
+### Step 3: Structured Storage
+
+Profiles Dataset
+
+* float_id
+* cycle_number
+* latitude
+* longitude
+* profile_date
+* n_levels
+
+Measurements Dataset
+
+* float_id
+* cycle_number
+* pressure
+* temperature
+* salinity
+
+### Step 4: Vector Database Creation
+
+Profiles are converted into scientific documents and embedded using:
+
+* Sentence Transformers (all-MiniLM-L6-v2)
+
+Stored in:
+
+* ChromaDB
+
+for semantic retrieval.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Programming:
-- Python  
+### AI / ML
 
-### Data Processing:
-- pandas  
-- numpy  
-- xarray  
-- netCDF4  
-- pyarrow  
+* Gemini 2.5 Flash
+* ChromaDB
+* Sentence Transformers
+* Retrieval-Augmented Generation (RAG)
 
-### Visualization:
-- Plotly  
-- matplotlib  
+### Data Processing
 
-### App Framework:
-- Streamlit  
+* Python
+* Pandas
+* NumPy
+* Xarray
+* NetCDF4
+* PyArrow
+
+### Visualization
+
+* Plotly
+* Matplotlib
+
+### Frontend
+
+* Streamlit
 
 ---
 
----
 ## 📦 Project Structure
 
-```
+```text
 FloatChat/
 │
 ├── app.py
 │
+├── rag/
+│   ├── create_documents.py
+│   ├── create_vector_db.py
+│   ├── retrieve.py
+│   └── gemini_rag.py
+│
 ├── core/
-│   ├── data_loader.py
-│   ├── query_engine.py
-│   ├── insights.py
-│   ├── analytics.py
-│   └── utils.py
-│
 ├── components/
-│   ├── sidebar.py
-│   ├── maps.py
-│   ├── metrics.py
-│   ├── query_panel.py
-│   ├── insight_cards.py
-│   └── comparison_panel.py
-│
+├── views/
 ├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
+
 ---
 
-##
----
+## ▶️ Running the Application
 
-## ▶️ How to Run
+Install dependencies:
 
-### 1. Install dependencies
-
+```bash
 pip install -r requirements.txt
+```
 
-### 2. Parse dataset
+Launch:
 
-python parse_all.py
-
-### 3. Run application
-
+```bash
 python -m streamlit run app.py
+```
 
 ---
 
-## 🎯 Key Features
-- ARGO trajectory visualization  
-- Temperature & salinity profiles  
-- Cycle comparison  
-- Query-based interaction  
-- Explainable ocean insights  
+## 📈 Example RAG Workflow
 
-## 🔬 Methodology
-- Rule-based query interpretation  
-- Gradient-based ocean analysis  
-- Structured filtering  
+Question:
 
-## 📚 Research Inspiration
-- ARGO Program Documentation  
-- Ocean Stratification Studies  
-- Explainable AI Systems  
+```text
+Which profiles indicate deep ocean conditions?
+```
 
-## 💡 Innovation Highlights
-- Multi-layer AI pipeline  
-- Explainable intelligence  
-- Event detection (thermocline, anomalies)
+Retrieved Profiles:
 
-##  ⚠️ Limitations
-- Focused on core ARGO parameters (TEMP, PSAL, PRES)
-- Rule-based intelligence (no deep learning models)
-- Limited geographic dataset scope
+```text
+1902676_9
+1902674_63
+1902677_46
+```
 
-## 🚀 Future Scope
-- BGC float integration
-- Advanced anomaly detection
-- Region-based querying
-- Improved natural language reasoning
+Scientific Explanation:
 
-## 🏁Conclusion
+```text
+All profiles indicate deep ocean conditions due to
+maximum observed pressures near 2000 dbar,
+corresponding to depths of approximately 2000 meters.
+```
 
-FloatChat transforms complex oceanographic data into an accessible, explainable, and intelligent system, enabling users to explore and understand ocean behavior without requiring domain expertise.
+---
 
-## 🔥 Final Statement
+## 🚀 Future Work
 
-“FloatChat transforms complex ocean data into explainable intelligence.”
+* Region-aware retrieval
+* Ocean knowledge graph integration
+* Hybrid search (keyword + vector)
+* Multi-turn conversational memory
+* Advanced anomaly detection
+* Ocean research copilot
+* BGC float integration
+
+---
+
+## 🏁 Conclusion
+
+FloatChat-RAG transforms large-scale oceanographic measurements into explainable scientific intelligence through semantic retrieval, vector search, and AI-powered reasoning.
+
+### Final Statement
+
+"From raw ocean measurements to explainable ocean intelligence."
