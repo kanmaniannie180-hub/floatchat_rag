@@ -1,6 +1,5 @@
 __pycache__/
 *.pyc
-.env
 .streamlit/
 node_modules/
 data/processed/*.parquet
