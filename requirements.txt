@@ -1,8 +1,10 @@
 streamlit
 pandas
 numpy
+matplotlib
 plotly
-pyarrow
+google-generativeai
 chromadb
 sentence-transformers
-google-generativeai
+python-dotenv
+scikit-learn
