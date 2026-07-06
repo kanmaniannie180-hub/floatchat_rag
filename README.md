@@ -698,6 +698,30 @@ FloatChat-RAG/
 ├── assets/
 └── components/
 ```
+---
+## demo images
+
+<img width="1024" height="557" alt="image" src="https://github.com/user-attachments/assets/d08ae62a-f942-464e-a1f6-21867a8cb9b2" />
+
+
+<img width="1024" height="713" alt="image" src="https://github.com/user-attachments/assets/d516faf0-b287-450d-b367-2fb259868226" />
+
+
+<img width="1024" height="430" alt="image" src="https://github.com/user-attachments/assets/ee71e9b8-f918-47a6-9e10-3130efb3b9c3" />
+
+
+<img width="1024" height="540" alt="image" src="https://github.com/user-attachments/assets/7f434145-bc26-44b1-b3a2-501528fd5a94" />
+
+
+<img width="1024" height="540" alt="image" src="https://github.com/user-attachments/assets/f3dacb63-1b14-456a-965b-462c7cfc281e" />
+
+
+<img width="1024" height="574" alt="image" src="https://github.com/user-attachments/assets/354d17a9-905d-4de7-b20c-8cb2db444c32" />
+
+
+<img width="1024" height="589" alt="image" src="https://github.com/user-attachments/assets/74077aef-e002-4420-a6f7-d59c43d370b0" />
+
+
 
 ---
 
